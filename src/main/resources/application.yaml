@@ -1,0 +1,103 @@
+# configurações do servidor
+server: 
+  servlet:
+    context-path: ${CONTEXT_PATH:/} 
+  port: ${SERVER_PORT:8080}
+
+# configurações do serviço
+spring:
+  application:
+    name: ${APP_NAME:appname}
+  aop:
+    auto: false
+  profiles:
+    active: sso-security
+  rabbitmq:
+    host: localhost
+    username: ${RABBIT_USERNAME:pdpj}
+    password: ${RABBIT_PASSWORD:pdpj}
+    virtual-host: ${RABBIT_VHOST:pdpj-dev}
+    template:
+      exchange: ${RABBIT_EXCHANGE:pdpj.exchange}
+    port: ${RABBIT_PORT:5672}
+    connection-timeout: 1000ms
+  jackson:
+    time-zone: Brazil/East
+    locale: pt-BR
+  datasource:
+    url: jdbc:postgresql://localhost:5432/appname
+    username: postgres
+    password: postgres
+  jpa:
+    properties:
+      hibernate:
+        default_schema: appname
+      org:
+        hibernate:
+          envers:
+            default_schema: audit
+  flyway:
+    url: jdbc:postgresql://localhost:5432/appname
+    schemas: appname
+    user: postgres
+    password: postgres
+    enabled: true
+  cache:
+    type: redis
+  redis:
+    host: localhost
+    port: 6379
+
+pdpj:
+  appName: ${APP_NAME:appname}
+  gatewayUrl: http://localhost:8180
+  nomeServico: Exemplo
+  descricao: Aplicação de Exemplo
+  iconePequenoUrl: /assets/images/icone_pequeno.jpeg
+  iconeGrandeUrl: /assets/images/icone_grande.jpeg
+  # frontendUrl: http://localhost:4200 # opcional
+  swaggerUrl: https://localhost:8180/appname/swagger-ui.html
+  documentacaoUsuarioUrl: 
+  documentacaoTecnicaUrl:
+
+# configurações do cliente para keycloak
+keycloak:
+  auth-server-url: ${SSO_AUTH_SERVER:http://localhost:8280/auth}
+  realm: ${SSO_REALM:pdpj}
+  resource: ${SSO_RESOURCE:appname}
+  bearer-only: true
+  principal-attribute: preferred_username
+  cors: true
+  ssl-required: none
+  credentials:
+    secret: ${SSO_SECRET}
+
+# configurações da instancia no service discovery    
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER_DEFAULT_ZONE:http://localhost:8761/eureka}
+    enabled: ${EUREKA_REGISTER_ENABLE:true}
+  instance:
+    healthCheckUrlPath: /actuator/health
+    statusPageUrlPath: /actuator/info
+    metadataMap:
+      pdpj: true # <- para ativar na marketplace
+    homePageUrl: http://localhost:4200 # <- url-base na marketplace (presume um frontend web em Angular)
+
+# configurações do actuator    
+management:
+  endpoints:
+    web.exposure.include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS 
+      
+# opções de log
+logging:
+  level:
+    br.jus.pdpj: DEBUG
+
+# opções de auditoria de endpoint
+auditoria:
+  naoLogar: actuator,swagger-ui.html,configuration,webjars,v2/api-docs,swagger-resources,api/v1/publico

@@ -1,0 +1,22 @@
+CREATE SCHEMA IF NOT EXISTS audit;
+
+CREATE SEQUENCE IF NOT EXISTS hibernate_sequence INCREMENT 1  MINVALUE 1  MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+CREATE TABLE IF NOT EXISTS audit.revinfo
+(
+    id BIGINT,
+    timestamp BIGINT,
+    username VARCHAR(50),
+    ip VARCHAR(50),
+    useragent TEXT,
+    PRIMARY KEY (id)
+); 
+
+CREATE TABLE IF NOT EXISTS audit.exemplo_aud
+(
+	id INT,
+	REV INTEGER,
+    REVTYPE SMALLINT,
+	nome VARCHAR(50),
+	CONSTRAINT classe_pkey PRIMARY KEY (id, REV)
+);

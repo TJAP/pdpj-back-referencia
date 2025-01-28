@@ -1,0 +1,45 @@
+# configurações do servidor
+server: 
+  servlet:
+    context-path: ${CONTEXT_PATH:/} 
+
+# configurações do serviço
+spring:
+  application:
+    name: ${APP_NAME:appname}
+  profiles:
+    active: test
+  jackson:
+    time-zone: Brazil/East
+    locale: pt-BR 
+  rabbitmq:
+    listener:
+      simple:
+        auto-startup: false
+  jpa:
+    properties:
+      hibernate:
+        default_schema: appname
+      org:
+        hibernate:
+          envers:
+            default_schema: audit
+  flyway:
+    schemas: appname 
+    enabled: true
+
+pdpj:
+  appName: ${APP_NAME:appname}
+
+eureka:
+  client:
+    enabled: false
+     
+# opções de log
+logging:
+  level:
+    br.jus.pdpj: DEBUG
+  
+# opções de auditoria de endpoint
+auditoria:
+  naoLogar: actuator,swagger-ui.html,configuration,webjars,v2/api-docs,swagger-resources
